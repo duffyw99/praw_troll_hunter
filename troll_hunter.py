@@ -10,10 +10,9 @@ reddit = praw.Reddit(client_id=client_id,
                      username=username,
                      password=password,
                      )
-
 subreddit = reddit.subreddit('all')
 
-hot_submissions = subreddit.hot(limit=1)  # number of posts
+hot_submissions = subreddit.hot(limit=5)  # number of posts
 
 potential_trolls = []
 for submission in hot_submissions:
@@ -23,8 +22,13 @@ for submission in hot_submissions:
 
     submission.comments.replace_more(limit=0)
     for comment in submission.comments:
-        if comment.score < -5:
-            print(comment.author, comment.body, comment.score, comment.downs)
-            if comment.author not in potential_trolls:
+        if comment.score <= -10:
+            print(comment.author, comment.score, comment.downs) # , comment.body
+            if comment.author not in potential_trolls and comment.author != None:
                 potential_trolls.append(comment.author)
 print(potential_trolls)
+
+for troll in potential_trolls:
+    trolls = reddit.redditor(str(troll))
+    for comment in trolls.comments.new(limit=None):
+        print(comment.author, comment.score, comment.body[:50])
