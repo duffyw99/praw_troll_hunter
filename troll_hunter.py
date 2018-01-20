@@ -15,7 +15,7 @@ subreddit = reddit.subreddit('all')
 
 hot_submissions = subreddit.hot(limit=1)  # number of posts
 
-# Find comments with scores below zero to identify potential troll users
+potential_trolls = []
 for submission in hot_submissions:
     # print(dir(submission))
     submission_id = submission.id
@@ -23,5 +23,8 @@ for submission in hot_submissions:
 
     submission.comments.replace_more(limit=0)
     for comment in submission.comments:
-        if comment.score < 0:
+        if comment.score < -5:
             print(comment.author, comment.body, comment.score, comment.downs)
+            if comment.author not in potential_trolls:
+                potential_trolls.append(comment.author)
+print(potential_trolls)
