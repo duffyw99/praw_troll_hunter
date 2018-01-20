@@ -1,0 +1,16 @@
+import praw
+from admin_ignore.praw_keys import * # clint_id, client_secret, pw, etc.
+
+reddit = praw.Reddit(client_id=client_id,
+                     client_secret=client_secret,
+                     user_agent=user_agent,
+                     username=username,
+                     password=password,
+                     )
+
+subreddit = reddit.subreddit('all')
+
+hot_sub = subreddit.hot(limit=10)  # number of posts
+
+for submission in hot_sub:
+    print(submission.title)
