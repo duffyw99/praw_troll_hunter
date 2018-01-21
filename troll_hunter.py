@@ -31,4 +31,5 @@ print(potential_trolls)
 for troll in potential_trolls:
     trolls = reddit.redditor(str(troll))
     for comment in trolls.comments.new(limit=None):
-        print(comment.author, comment.score, comment.body[:50])
+        if comment.score < karma_threshold:
+            print(comment.author, comment.score, comment.body[:50])
