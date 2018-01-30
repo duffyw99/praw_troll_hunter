@@ -1,9 +1,5 @@
 import praw
 from admin_ignore.praw_keys import *  # clint_id, client_secret, pw, etc.
-import json
-import re
-import random
-import time
 
 # Establish connection to reddit
 reddit = praw.Reddit(client_id=client_id,
@@ -23,7 +19,6 @@ with open('troll_registry.txt', 'r') as f:
 
 # Scan comments from top posts for negitive comments
 for submission in hot_submissions:
-    # print(dir(submission))
     submission_id = submission.id
     submission = reddit.submission(id=submission_id)
 
@@ -31,7 +26,8 @@ for submission in hot_submissions:
     for comment in submission.comments:
         if comment.score <= karma_threshold:
             print(comment.author, comment.score, comment.downs)  # ,comment.body
-            if comment.author not in potential_trolls and comment.author is not None:
+            if (comment.author not in potential_trolls and
+                comment.author is not None):
                 potential_trolls.append(comment.author)
 
 with open('troll_registry.txt', 'w') as file:
